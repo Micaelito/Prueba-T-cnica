@@ -4,16 +4,6 @@ const router = express.Router();
 const taskCollection = require('../services/firebaseService');
 const { getWeatherByCity } = require('../services/weatherService');
 
-router.get('/', async (req, res) => {
-    try {
-        const snapshot = await taskCollection.get();
-        const tasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        res.json(tasks);
-    } catch (error) {
-        console.error('Error al obtener tareas:', error.message);
-        res.status(500).json({ error: 'Error al obtener tareas' });
-    }
-});
 
 router.post('/', async (req, res) => {
     try {
@@ -25,35 +15,43 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: 'No se pudo obtener el clima de la ciudad' });
         }
 
-        const isValidTemp = weatherData.temp >= newTask.tempMin && weatherData.temp <= newTask.tempMax;
-        const isValidRain = newTask.acceptRain || weatherData.weather.toLowerCase() !== 'rain';
-        const isValidWind = newTask.acceptWind || weatherData.wind < 10;
+       
+        const tempOk = weatherData.temp >= newTask.tempMin && weatherData.temp <= newTask.tempMax;
+        const rainOk = newTask.acceptRain || weatherData.weather.toLowerCase() !== 'rain';
+        const windOk = newTask.acceptWind || weatherData.wind < 10;
 
-        const isExecutable = isValidTemp && isValidRain && isValidWind;
+
+        let reasons = [];
+        if (!tempOk) reasons.push(`Temperatura actual (${weatherData.temp}°C) fuera del rango deseado (${newTask.tempMin}°C - ${newTask.tempMax}°C)`);
+        if (!rainOk) reasons.push(`Condición climática: ${weatherData.weather}, pero no se acepta lluvia`);
+        if (!windOk) reasons.push(`Viento actual (${weatherData.wind} m/s) supera el límite permitido`);
+
+   
+        let score = 0;
+        if (tempOk) score += 33.3;
+        if (rainOk) score += 33.3;
+        if (windOk) score += 33.3;
+        const roundedScore = Math.round(score);
+
+
+        const isExecutable = tempOk && rainOk && windOk;
+
 
         const taskWithWeather = {
             ...newTask,
             weather: weatherData,
-            executable: isExecutable
+            executable: isExecutable,
+            viabilityScore: roundedScore,
+            reasonsNotExecutable: isExecutable ? [] : reasons
         };
 
         const docRef = await taskCollection.add(taskWithWeather);
         res.status(201).json({ id: docRef.id, ...taskWithWeather });
+
     } catch (error) {
-        console.error('Error al crear tarea:', error.message);
-        res.status(500).json({ error: 'Error al crear tarea' });
+        console.error('Error al crear tarea con clima:', error.message);
+        res.status(500).json({ error: 'Error al crear tarea con clima' });
     }
 });
 
-router.put('/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        await taskCollection.doc(id).set(req.body);
-        res.json({ id, ...req.body });
-    } catch (error) {
-        console.error('Error al actualizar tarea:', error.message);
-        res.status(500).json({ error: 'Error al actualizar tarea' });
-    }
-});
 module.exports = router;
-
