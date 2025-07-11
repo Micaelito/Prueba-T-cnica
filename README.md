@@ -1,0 +1,2 @@
+Subo adelanto del pryecto, en cuestión me ha sido un poco dificil trabajar ya que no he tenido experiencia previa con GitHub, pero he aprendido a usarlo a breves rasgos y creo que mes estoy encaminando bien. He creado un repositorio y he subido el código de mi proyecto. También he creado un archivo README.md para documentar el proyecto.
+Además de ello, estoy elaborando un reporte en un documento de word donde estoy explicandod de manera detallada los codigos y el funcionamin¿ento del proyecto.
