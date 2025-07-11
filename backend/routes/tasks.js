@@ -1,32 +1,35 @@
 const express = require('express');
 const router = express.Router();
-let tasks = [];
-router.get('/', (req, res) => {
-    res.json(tasks);
-});
-router.post('/', (req, res) => {
-    const newTask = req.body;
-    tasks.push(newTask);
-    res.status(201).json(newTask);
-}); 
-router.put('/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    if (id > 0 && id <= tasks.length) {
-        tasks[id] = req.body;
-        res.json(tasks[id]);
-    } else {
-        res.status(404).json({ error: 'Tarea no encontrada' });
-    }           
-});
-router.delete('/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    if (id >= 0 && id <= tasks.length) {
-        const deleted = tasks.splice(id, 1);
-        res.json(deleted[0]);
-    } else {
-        res.status(404).json({ error: 'Tarea no encontrada' });
+taskCollection = require('../Services/firebaseService');
 
+router.get('/', async (req, res) => {
+    try {
+        const snapshot = await taskCollection.get();
+        const tasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.json(tasks);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener las tareas' });
     }
+}); 
+router.put('/:id', async (req, res) => {
+    try {
+    const id = req.params.id;
+    await taskCollection.doc(id).set(req.body)
+    res.json({ id, ...req.body });
+} catch (error) { 
+    res.status(500).json({ error: 'Error al actualizar la tarea' });
+}
 });
+router.delete('/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        await taskCollection.doc(id).delete();
+        res.json({ message: 'Tarea eliminada' });
+    } catch (error) {   
+        res.status(500).json({ error: 'Error al eliminar la tarea' });
+    }
+}  
+);
 module.exports = router;
+
 
