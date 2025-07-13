@@ -1,0 +1,15 @@
+.task-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+}
+
+  .task-card input {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .task-card button {
+    margin-right: 0.5rem;
+  }

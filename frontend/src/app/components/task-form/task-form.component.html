@@ -1,0 +1,44 @@
+<h2>Crear Tarea</h2>
+
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="space-y-4">
+  <label>
+    Título:
+    <input formControlName="title" type="text" />
+  </label><br>
+
+  <label>
+    Descripción:
+    <textarea formControlName="description"></textarea>
+  </label><br>
+
+  <label>
+    Ciudad:
+    <input formControlName="city" type="text" />
+  </label><br>
+
+  <label>
+    Temperatura Mínima (°C):
+    <input formControlName="tempMin" type="number" />
+  </label><br>
+
+  <label>
+    Temperatura Máxima (°C):
+    <input formControlName="tempMax" type="number" />
+  </label><br>
+
+  <label>
+    <input formControlName="acceptRain" type="checkbox" />
+    Acepta Lluvia
+  </label><br>
+
+  <label>
+    <input formControlName="acceptWind" type="checkbox" />
+    Acepta Viento Fuerte
+  </label><br>
+
+  <button type="submit">Crear tarea</button>
+</form>
+
+<p *ngIf="feedbackMessage" style="color: red; margin-top: 1rem;">
+  {{ feedbackMessage }}
+</p>

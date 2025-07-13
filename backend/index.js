@@ -1,21 +1,14 @@
 ﻿const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
-
 const app = express();
-const PORT = process.env.PORT || 3000;
+const tasksRoutes = require('./routes/tasks');
 
 app.use(cors());
 app.use(express.json());
 
-const taskRoutes = require('./routes/tasks');
-app.use('/tasks', taskRoutes);
 
-app.get('/', (req, res) => {
-    res.send('Servidor Prueba Funcional');
+app.use('/tasks', tasksRoutes);
+
+app.listen(3000, () => {
+    console.log('Servidor escuchando en http://localhost:3000');
 });
-
-app.listen(PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
-
