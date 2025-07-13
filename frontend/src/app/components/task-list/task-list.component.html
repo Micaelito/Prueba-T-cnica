@@ -1,0 +1,17 @@
+<h2>Listado de Tareas</h2>
+
+<ul *ngIf="tasks.length > 0; else noTareas">
+  <li *ngFor="let task of tasks">
+    <strong>{{ task.title }}</strong> — {{ task.description }}<br>
+    Ciudad: {{ task.city }}<br>
+    Ejecutable:
+    <span [style.color]="task.executable ? 'green' : 'red'">
+      {{ task.executable ? 'Sí ✅' : 'No ❌' }}
+    </span>
+    <hr>
+  </li>
+</ul>
+
+<ng-template #noTareas>
+  <p>No hay tareas disponibles.</p>
+</ng-template>
