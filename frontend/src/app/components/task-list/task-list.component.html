@@ -1,6 +1,5 @@
 <h2>Lista de Tareas</h2>
-
-<table border="1" cellpadding="8">
+<table border="1">
   <thead>
     <tr>
       <th>Título</th>
@@ -15,8 +14,8 @@
       <td>{{ task.title }}</td>
       <td>{{ task.description }}</td>
       <td>{{ task.completed ? 'Sí' : 'No' }}</td>
-      <td>{{ task.score ?? 'N/A' }}</td>
-      <td><button (click)="deleteTask(task.id!)">Eliminar</button></td>
+      <td>{{ task.viabilityScore ?? 'N/A' }}</td>
+      <td><button (click)="deleteTask(task.id)">Eliminar</button></td>
     </tr>
   </tbody>
 </table>

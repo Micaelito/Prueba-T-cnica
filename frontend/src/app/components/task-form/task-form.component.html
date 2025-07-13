@@ -1,44 +1,35 @@
-<h2>Crear Tarea</h2>
-
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="space-y-4">
-  <label>
-    Título:
-    <input formControlName="title" type="text" />
-  </label><br>
-
-  <label>
-    Descripción:
+  <div>
+    <label>Título:</label>
+    <input formControlName="title" />
+  </div>
+  <div>
+    <label>Descripción:</label>
     <textarea formControlName="description"></textarea>
-  </label><br>
-
-  <label>
-    Ciudad:
-    <input formControlName="city" type="text" />
-  </label><br>
-
-  <label>
-    Temperatura Mínima (°C):
+  </div>
+  <div>
+    <label>Ciudad:</label>
+    <input formControlName="city" />
+  </div>
+  <div>
+    <label>Temperatura Mínima (°C):</label>
     <input formControlName="tempMin" type="number" />
-  </label><br>
-
-  <label>
-    Temperatura Máxima (°C):
+  </div>
+  <div>
+    <label>Temperatura Máxima (°C):</label>
     <input formControlName="tempMax" type="number" />
-  </label><br>
-
-  <label>
-    <input formControlName="acceptRain" type="checkbox" />
-    Acepta Lluvia
-  </label><br>
-
-  <label>
-    <input formControlName="acceptWind" type="checkbox" />
-    Acepta Viento Fuerte
-  </label><br>
-
+  </div>
+  <div>
+    <label>
+      <input type="checkbox" formControlName="acceptRain" /> Acepta Lluvia
+    </label>
+  </div>
+  <div>
+    <label>
+      <input type="checkbox" formControlName="acceptWind" /> Acepta Viento Fuerte
+    </label>
+  </div>
   <button type="submit">Crear tarea</button>
 </form>
 
-<p *ngIf="feedbackMessage" style="color: red; margin-top: 1rem;">
-  {{ feedbackMessage }}
-</p>
+<div *ngIf="feedbackMessage" style="margin-top: 1rem;">{{ feedbackMessage }}</div>

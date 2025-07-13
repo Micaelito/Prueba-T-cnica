@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Task, TaskService } from '../../services/task.service';
+import { TaskService, Task } from '../../services/task.service';
 
 @Component({
   selector: 'app-task-list',
@@ -24,20 +24,25 @@ export class TaskListComponent implements OnInit {
 
   loadTasks(): void {
     this.taskService.getTasks().subscribe({
-      next: (data: Task[]) => {
+      next: (data) => {
         this.tasks = data.sort((a, b) => (b.viabilityScore ?? 0) - (a.viabilityScore ?? 0));
       },
-      error: (err: any) => {
+      error: (err) => {
         console.error('Error al obtener tareas:', err);
       }
     });
   }
 
-  deleteTask(id?: string): void {
+  deleteTask(id: string | undefined): void {
     if (!id) return;
+
     this.taskService.deleteTask(id).subscribe({
-      next: () => this.loadTasks(),
-      error: (err) => console.error('Error al eliminar tarea:', err)
+      next: () => {
+        this.loadTasks();
+      },
+      error: (err) => {
+        console.error('Error al eliminar tarea:', err);
+      }
     });
   }
 }

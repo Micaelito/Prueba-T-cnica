@@ -6,16 +6,20 @@ export interface Task {
   id?: string;
   title: string;
   description?: string;
-  completed: boolean;
   city: string;
   tempMin: number;
   tempMax: number;
   acceptRain: boolean;
   acceptWind: boolean;
+  completed?: boolean;
   executable?: boolean;
   viabilityScore?: number;
-  weather?: any;
   reasonsNotExecutable?: string[];
+  weather?: {
+    temp: number;
+    weather: string;
+    wind: number;
+  };
 }
 
 @Injectable({
@@ -24,8 +28,8 @@ export interface Task {
 export class TaskService {
   private apiUrl = 'http://localhost:3000/tasks';
 
-  // ✅ Esta propiedad es la que estaba faltando
-  taskCreated$ = new Subject<void>();
+  private taskCreatedSubject = new Subject<void>();
+  taskCreated$ = this.taskCreatedSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -37,11 +41,15 @@ export class TaskService {
     return this.http.post<Task>(this.apiUrl, task);
   }
 
-  deleteTask(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  deleteTask(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  updateTask(id: string, task: Partial<Task>): Observable<Task> {
-    return this.http.patch<Task>(`${this.apiUrl}/${id}`, task);
+  updateTask(id: string, task: Task): Observable<Task> {
+    return this.http.put<Task>(`${this.apiUrl}/${id}`, task);
+  }
+
+  notifyTaskCreated(): void {
+    this.taskCreatedSubject.next();
   }
 }

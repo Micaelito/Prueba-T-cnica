@@ -1,15 +1,14 @@
-.task-card {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 6px;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
 }
 
-  .task-card input {
-    display: block;
-    margin-bottom: 0.5rem;
-  }
+th {
+  background-color: #f0f0f0;
+  text-align: left;
+}
 
-  .task-card button {
-    margin-right: 0.5rem;
-  }
+td, th {
+  padding: 8px;
+}
